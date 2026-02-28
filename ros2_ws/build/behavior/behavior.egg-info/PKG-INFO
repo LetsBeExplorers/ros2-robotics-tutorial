@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: behavior
+Version: 0.0.0
+Summary: Autonomous decision-making layer for robot control.
+Maintainer: raytracer
+Maintainer-email: ray3618@gmail.com
+License: MIT
+Provides-Extra: test

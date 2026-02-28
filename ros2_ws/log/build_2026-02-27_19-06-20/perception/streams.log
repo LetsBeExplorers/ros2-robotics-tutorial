@@ -1,0 +1,20 @@
+[1.643s] Invoking command in '/home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/src/perception': CONDA_PROMPT_MODIFIER=(base) DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/perception/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/perception/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/perception build --build-base /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/perception/build install --record /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/perception/install.log --single-version-externally-managed install_data
+[2.014s] running egg_info
+[2.039s] writing ../../build/perception/perception.egg-info/PKG-INFO
+[2.040s] writing dependency_links to ../../build/perception/perception.egg-info/dependency_links.txt
+[2.041s] writing requirements to ../../build/perception/perception.egg-info/requires.txt
+[2.041s] writing top-level names to ../../build/perception/perception.egg-info/top_level.txt
+[2.096s] reading manifest file '../../build/perception/perception.egg-info/SOURCES.txt'
+[2.097s] writing manifest file '../../build/perception/perception.egg-info/SOURCES.txt'
+[2.097s] running build
+[2.097s] running build_py
+[2.098s] running install
+[2.107s] running install_lib
+[2.137s] running install_data
+[2.137s] copying package.xml -> /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/perception/share/perception
+[2.137s] running install_egg_info
+[2.166s] removing '/home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/perception/lib/python3.12/site-packages/perception-0.0.0-py3.12.egg-info' (and everything under it)
+[2.166s] Copying ../../build/perception/perception.egg-info to /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/perception/lib/python3.12/site-packages/perception-0.0.0-py3.12.egg-info
+[2.168s] running install_scripts
+[2.357s] writing list of installed files to '/home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/perception/install.log'
+[2.438s] Invoked command in '/home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/src/perception' returned '0': CONDA_PROMPT_MODIFIER=(base) DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/perception/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/perception/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/perception build --build-base /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/perception/build install --record /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/perception/install.log --single-version-externally-managed install_data

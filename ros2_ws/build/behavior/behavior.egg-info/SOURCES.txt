@@ -1,0 +1,14 @@
+package.xml
+setup.cfg
+setup.py
+../../build/behavior/behavior.egg-info/PKG-INFO
+../../build/behavior/behavior.egg-info/SOURCES.txt
+../../build/behavior/behavior.egg-info/dependency_links.txt
+../../build/behavior/behavior.egg-info/requires.txt
+../../build/behavior/behavior.egg-info/top_level.txt
+../../build/behavior/behavior.egg-info/zip-safe
+behavior/__init__.py
+resource/behavior
+test/test_copyright.py
+test/test_flake8.py
+test/test_pep257.py

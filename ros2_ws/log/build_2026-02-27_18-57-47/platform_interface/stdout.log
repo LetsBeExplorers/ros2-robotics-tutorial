@@ -1,0 +1,30 @@
+running egg_info
+creating ../../build/platform_interface/platform_interface.egg-info
+writing ../../build/platform_interface/platform_interface.egg-info/PKG-INFO
+writing dependency_links to ../../build/platform_interface/platform_interface.egg-info/dependency_links.txt
+writing requirements to ../../build/platform_interface/platform_interface.egg-info/requires.txt
+writing top-level names to ../../build/platform_interface/platform_interface.egg-info/top_level.txt
+writing manifest file '../../build/platform_interface/platform_interface.egg-info/SOURCES.txt'
+reading manifest file '../../build/platform_interface/platform_interface.egg-info/SOURCES.txt'
+writing manifest file '../../build/platform_interface/platform_interface.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/platform_interface/build
+creating /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/platform_interface/build/lib
+creating /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/platform_interface/build/lib/platform_interface
+copying platform_interface/__init__.py -> /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/platform_interface/build/lib/platform_interface
+running install
+running install_lib
+creating /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/platform_interface/lib/python3.12/site-packages/platform_interface
+copying /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/platform_interface/build/lib/platform_interface/__init__.py -> /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/platform_interface/lib/python3.12/site-packages/platform_interface
+byte-compiling /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/platform_interface/lib/python3.12/site-packages/platform_interface/__init__.py to __init__.cpython-312.pyc
+running install_data
+creating /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/platform_interface/share/ament_index
+creating /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/platform_interface/share/ament_index/resource_index
+creating /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/platform_interface/share/ament_index/resource_index/packages
+copying resource/platform_interface -> /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/platform_interface/share/ament_index/resource_index/packages
+copying package.xml -> /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/platform_interface/share/platform_interface
+running install_egg_info
+Copying ../../build/platform_interface/platform_interface.egg-info to /home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/install/platform_interface/lib/python3.12/site-packages/platform_interface-0.0.0-py3.12.egg-info
+running install_scripts
+writing list of installed files to '/home/raytracer/projects/DASE4460/ros2-uav-demo/ros2_ws/build/platform_interface/install.log'

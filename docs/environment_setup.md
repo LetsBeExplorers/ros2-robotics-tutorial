@@ -8,9 +8,9 @@ This document describes how to configure the development environment required to
 
 Verify Ubuntu version:
 
-~~~bash
+```bash
 lsb_release -a
-~~~
+```
 
 ## 2. Install ROS 2 Jazzy
 
@@ -18,79 +18,157 @@ Follow the official ROS 2 Jazzy installation guide for Ubuntu 24.04.
 
 After installation, source ROS:
 
-~~~bash
+```bash
 source /opt/ros/jazzy/setup.bash
-~~~
+```
 
-To verify installation:
+Verify installation:
 
-~~~bash
+```bash
 echo $ROS_DISTRO
-~~~
+```
 
 Expected output:
 
-~~~
+```
 jazzy
-~~~
+```
 
-Optional verification:
+Optional diagnostic check:
 
-~~~bash
+```bash
 ros2 doctor
-~~~
+```
 
 ## 3. Install Gazebo Harmonic
 
 Verify Gazebo installation:
 
-~~~bash
+```bash
 gz sim --versions
-~~~
+```
 
 Expected output should display version 8.x.x (Harmonic).
 
 If Gazebo is not installed:
 
-~~~bash
+```bash
 sudo apt update
 sudo apt install gz-sim
-~~~
+```
 
 ## 4. Install Required ROS 2 Packages
 
 Install ROS–Gazebo integration packages:
 
-~~~bash
+```bash
 sudo apt install ros-jazzy-gz-sim ros-jazzy-gz-ros2-control
-~~~
+```
 
-(Additional dependencies will be listed here as development progresses.)
+Install TurtleBot3 packages:
 
-## 5. Create ROS 2 Workspace
+```bash
+sudo apt install ros-jazzy-turtlebot3*
+```
+
+Verify installation:
+
+```bash
+ros2 pkg list | grep turtlebot3
+```
+
+You should see packages such as:
+
+- turtlebot3_description  
+- turtlebot3_gazebo  
+- turtlebot3_bringup  
+
+## 5. Set TurtleBot3 Model
+
+The TurtleBot3 model must be defined before launching simulation.
+
+For the Burger model:
+
+```bash
+export TURTLEBOT3_MODEL=burger
+```
+
+To make this permanent across new terminals:
+
+```bash
+echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
+source ~/.bashrc
+```
+
+Verify:
+
+```bash
+echo $TURTLEBOT3_MODEL
+```
+
+Expected output:
+
+```
+burger
+```
+
+## 6. Launch Simulation
+
+Start the official TurtleBot3 Gazebo world:
+
+```bash
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
+```
+
+Wait 10–15 seconds for Gazebo to fully initialize.
+
+The TurtleBot3 robot should appear in the simulation world.
+
+## 7. If Simulation Fails to Start Cleanly
+
+If Gazebo does not launch properly or the robot does not appear:
+
+```bash
+pkill -9 gz
+pkill -9 ros2
+```
+
+Then open a new terminal and relaunch the simulation.
+
+## 8. Create ROS 2 Workspace
 
 Create a new workspace:
 
-~~~bash
+```bash
 mkdir -p ~/ros2_tutorial_ws/src
 cd ~/ros2_tutorial_ws
 colcon build
-~~~
+```
 
-## 6. Source Workspace
+## 9. Source Workspace
 
 After building:
 
-~~~bash
+```bash
 source install/setup.bash
-~~~
+```
 
 To automatically source in new terminals (optional):
 
-~~~bash
+```bash
 echo "source ~/ros2_tutorial_ws/install/setup.bash" >> ~/.bashrc
-~~~
+```
 
-## 7. Verify ROS 2 and Gazebo Communication
+## 10. Verify ROS 2 and Gazebo Communication
 
-(To be completed after robot integration is added.)
+After the robot appears, verify active topics:
+
+```bash
+ros2 topic list
+```
+
+You should see topics such as:
+
+- `/cmd_vel`
+- `/odom`
+- `/scan`

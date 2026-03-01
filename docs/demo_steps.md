@@ -12,17 +12,46 @@ source /opt/ros/jazzy/setup.bash
 
 ---
 
-## 2. Launch Simulation
+## 2. Set TurtleBot3 Model
+
+TurtleBot3 requires the model type to be set before launching.
 
 ~~~bash
-ros2 launch turtlebot3_gazebo empty_world.launch.py
+export TURTLEBOT3_MODEL=burger
+~~~
+
+To make this persistent across terminals:
+
+~~~bash
+echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
+source ~/.bashrc
+~~~
+
+Verify:
+
+~~~bash
+echo $TURTLEBOT3_MODEL
+~~~
+
+Expected output:
+
+~~~
+burger
+~~~
+
+---
+
+## 3. Launch Simulation World
+
+~~~bash
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ~~~
 
 Wait for Gazebo to open and ensure simulation is running.
 
 ---
 
-## 3. Verify Available Topics
+## 4. Verify Available Topics
 
 ~~~bash
 ros2 topic list
@@ -36,19 +65,19 @@ Discuss:
 
 ---
 
-## 4. Inspect Command Velocity Topic
+## 5. Inspect Command Velocity Topic
 
 ~~~bash
 ros2 topic info /cmd_vel
 ~~~
 
 Explain:
-- Message type (TwistStamped)
+- Message type (`TwistStamped`)
 - Subscriber count
 
 ---
 
-## 5. Move Robot Forward
+## 6. Move Robot Forward
 
 ~~~bash
 ros2 topic pub -r 10 /cmd_vel geometry_msgs/msg/TwistStamped "{header: {frame_id: 'base_link'}, twist: {linear: {x: 0.2}, angular: {z: 0.0}}}"
@@ -58,21 +87,38 @@ Stop with Ctrl+C.
 
 ---
 
-## 6. Stop Robot
+## 7. Stop Robot Explicitly
 
 ~~~bash
 ros2 topic pub --once /cmd_vel geometry_msgs/msg/TwistStamped "{header: {frame_id: 'base_link'}, twist: {linear: {x: 0.0}, angular: {z: 0.0}}}"
 ~~~
 
+Discuss:
+- Controllers maintain last velocity.
+- Always explicitly send zero to stop.
+
 ---
 
-## 7. Inspect LaserScan Data
+## 8. Rotate Robot to Observe Sensor Changes
+
+~~~bash
+ros2 topic pub -r 5 /cmd_vel geometry_msgs/msg/TwistStamped "{header: {frame_id: 'base_link'}, twist: {linear: {x: 0.0}, angular: {z: 0.3}}}"
+~~~
+
+Open a new terminal:
 
 ~~~bash
 ros2 topic echo /scan
 ~~~
 
-Explain:
-- ranges array
-- angle_min / angle_max
-- obstacle detection concept
+Stop rotation with Ctrl+C and send zero velocity.
+
+---
+
+## 9. Inspect LaserScan Data
+
+Discuss:
+- `ranges[]` array
+- `inf` values (no obstacle detected)
+- Finite values (distance in meters)
+- How values change as robot rotates or approaches walls

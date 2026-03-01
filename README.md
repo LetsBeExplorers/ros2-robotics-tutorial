@@ -1,30 +1,39 @@
-# Autonomous UAV Simulation with ROS 2 (Jazzy)
+# ROS 2 Autonomous Navigation Tutorial (Jazzy)
 
-> Work in Progress – Under Active Development
+> Development in Progress
 
 ## Overview
 
-This project demonstrates core ROS 2 concepts using a simulated UAV in Gazebo.  
-It is being developed as part of an Intelligent Robotics tutorial assignment.
+This repository contains a ROS 2 tutorial project focused on demonstrating core robotics concepts using a simulated differential drive robot in Gazebo.
 
-The tutorial will include:
+The goal of this project is to implement and demonstrate:
 
-- ROS 2 workspace setup and build (colcon)
-- Node communication (publishers and subscribers)
-- Robot motion control via ROS topics
-- Sensor data interpretation
-- Implementation of autonomous UAV behavior
-- Use of ROS tools (ros2 topic, rqt_graph, etc.)
+- ROS 2 workspace setup and build process  
+- Node communication (publishers/subscribers)  
+- Robot motion control  
+- Sensor data interpretation  
+- Reactive obstacle avoidance behavior  
 
-## System Configuration
+The project is currently under active development.
 
-- Operating System: Ubuntu 24.04 LTS  
-- ROS 2 Distribution: Jazzy  
-- Simulation Environment: Gazebo (to be finalized)
+## Planned System Configuration
+
+- **Operating System:** Ubuntu 24.04 LTS  
+- **ROS 2 Distribution:** Jazzy  
+- **Simulation Environment:** Gazebo Harmonic  
+- **Robot Type:** Differential drive mobile robot  
+- **Primary Sensor:** LiDAR (LaserScan)  
+
+## Current Status
+
+- ROS 2 environment configured  
+- Gazebo verified working  
+- Project structure initialized  
+- Robot integration and autonomous behavior in progress  
 
 ## Build Instructions
 
-From inside `ros2_ws`:
+From inside the workspace root:
 
 ```bash
 colcon build

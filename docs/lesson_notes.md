@@ -102,3 +102,52 @@ Pressing reset in Gazebo can remove the robot from the world.
 If that happens, the simulation must be relaunched.
 
 This is normal behavior when entities are spawned through launch files.
+
+## 8. Environment Variables in ROS 2
+
+Some ROS launch files depend on environment variables.
+
+In this case, TurtleBot3 requires:
+
+TURTLEBOT3_MODEL
+
+If this variable is not set, the world may launch without spawning the robot.
+
+Environment variables set using `export` only persist for the current terminal session.
+
+To make them permanent, add them to `~/.bashrc`.
+
+## 9. Understanding `/scan` (LaserScan Data)
+
+The `/scan` topic publishes messages of type:
+
+`sensor_msgs/msg/LaserScan`
+
+This represents distance measurements from a 2D LiDAR sensor mounted on the robot.
+
+Key fields in the message:
+
+- `ranges[]` – array of distance values (in meters)
+- `angle_min` – starting scan angle
+- `angle_max` – ending scan angle
+- `angle_increment` – spacing between measurements
+
+The `ranges[]` array contains one distance value per laser beam.
+
+Each value represents:
+
+> The distance to the nearest obstacle in that direction.
+
+### Interpreting Values
+
+- `inf` means no obstacle detected within the sensor’s maximum range.
+- Small finite numbers (e.g., 0.4, 0.6) indicate nearby objects.
+- As the robot rotates, different beams detect different objects.
+- As the robot approaches a wall, some values decrease.
+
+Important concept:
+
+The sensor does not identify objects.
+It only provides raw distance measurements.
+
+Autonomous behavior must interpret these values to decide how to move.

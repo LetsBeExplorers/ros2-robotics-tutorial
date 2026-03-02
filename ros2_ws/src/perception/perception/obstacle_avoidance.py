@@ -3,7 +3,6 @@ from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
 import math
 
-
 class ObstacleAvoidance(Node):
 
     def __init__(self):
@@ -45,14 +44,12 @@ class ObstacleAvoidance(Node):
             f"L: {left_min:.2f} F: {front_min:.2f} R: {right_min:.2f}"
         )
 
-
 def main(args=None):
     rclpy.init(args=args)
     node = ObstacleAvoidance()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
-
 
 if __name__ == "__main__":
     main()

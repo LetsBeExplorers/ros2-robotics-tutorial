@@ -1,8 +1,0 @@
-Metadata-Version: 2.1
-Name: platform-interface
-Version: 0.0.0
-Summary: Platform abstraction layer for robot motion control in simulation.
-Maintainer: raytracer
-Maintainer-email: ray3618@gmail.com
-License: MIT
-Provides-Extra: test

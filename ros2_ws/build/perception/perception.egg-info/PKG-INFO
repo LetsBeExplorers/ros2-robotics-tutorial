@@ -1,8 +1,0 @@
-Metadata-Version: 2.1
-Name: perception
-Version: 0.0.0
-Summary: Perception layer for processing sensor data in the simulated robot.
-Maintainer: raytracer
-Maintainer-email: ray3618@gmail.com
-License: MIT
-Provides-Extra: test

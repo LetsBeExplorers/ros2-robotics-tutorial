@@ -1,6 +1,7 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import LaserScan
+from std_msgs.msg import Float32MultiArray
 import math
 
 class ObstacleAvoidance(Node):
@@ -13,6 +14,12 @@ class ObstacleAvoidance(Node):
             LaserScan,
             '/scan',
             self.scan_callback,
+            10
+        )
+
+        self.publisher = self.create_publisher(
+            Float32MultiArray,
+            '/obstacle_info',
             10
         )
 
@@ -43,6 +50,10 @@ class ObstacleAvoidance(Node):
         self.get_logger().info(
             f"L: {left_min:.2f} F: {front_min:.2f} R: {right_min:.2f}"
         )
+
+        msg_out = Float32MultiArray()
+        msg_out.data = [left_min, front_min, right_min]
+        self.publisher.publish(msg_out)
 
 def main(args=None):
     rclpy.init(args=args)

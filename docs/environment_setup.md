@@ -59,16 +59,11 @@ sudo apt install gz-sim
 
 ## 4. Install Required ROS 2 Packages
 
-Install ROS–Gazebo integration packages:
+Install ROS–Gazebo integration and TurtleBot3 packages:
 
 ```bash
-sudo apt install ros-jazzy-gz-sim ros-jazzy-gz-ros2-control
-```
-
-Install TurtleBot3 packages:
-
-```bash
-sudo apt install ros-jazzy-turtlebot3*
+sudo apt update
+sudo apt install ros-jazzy-gz-sim ros-jazzy-gz-ros2-control ros-jazzy-ros-gz-bridge ros-jazzy-turtlebot3*
 ```
 
 Verify installation:
@@ -120,9 +115,7 @@ Start the official TurtleBot3 Gazebo world:
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
 
-Wait 10–15 seconds for Gazebo to fully initialize.
-
-The TurtleBot3 robot should appear in the simulation world.
+Wait until Gazebo fully loads and the TurtleBot3 robot appears in the world before proceeding.
 
 ## 7. If Simulation Fails to Start Cleanly
 
@@ -161,7 +154,7 @@ echo "source ~/ros2_tutorial_ws/install/setup.bash" >> ~/.bashrc
 
 ## 10. Verify ROS 2 and Gazebo Communication
 
-After the robot appears, verify active topics:
+After the robot appears, confirm active topics:
 
 ```bash
 ros2 topic list
@@ -172,3 +165,4 @@ You should see topics such as:
 - `/cmd_vel`
 - `/odom`
 - `/scan`
+- `/tf`

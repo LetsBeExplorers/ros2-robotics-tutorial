@@ -128,17 +128,16 @@ pkill -9 ros2
 
 Then open a new terminal and relaunch the simulation.
 
-## 8. Create ROS 2 Workspace
+## 8. Build the ROS 2 Workspace
 
-Create a new workspace:
+After cloning the repository, navigate to the workspace directory:
 
 ```bash
-mkdir -p ~/ros2_tutorial_ws/src
-cd ~/ros2_tutorial_ws
+cd ros2_ws
 colcon build
 ```
 
-## 9. Source Workspace
+## 9. Source the Workspace
 
 After building:
 
@@ -149,7 +148,7 @@ source install/setup.bash
 To automatically source in new terminals (optional):
 
 ```bash
-echo "source ~/ros2_tutorial_ws/install/setup.bash" >> ~/.bashrc
+echo "source $(pwd)/install/setup.bash" >> ~/.bashrc
 ```
 
 ## 10. Verify ROS 2 and Gazebo Communication

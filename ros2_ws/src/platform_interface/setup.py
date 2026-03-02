@@ -24,7 +24,6 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'motion_controller = platform_interface.motion_controller:main',
         ],
     },
 )

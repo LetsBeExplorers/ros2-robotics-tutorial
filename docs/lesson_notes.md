@@ -18,14 +18,14 @@ In this setup:
 We launched the simulation using:
 
 ```
-ros2 launch turtlebot3_gazebo empty_world.launch.py
+ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
 
 This:
 
 - Starts Gazebo
 - Spawns the TurtleBot3 model
-- Starts the robot controller
+- Starts the robot controller and sensor plugins
 
 ## 3. Inspecting Topics
 
@@ -43,6 +43,8 @@ Important topics observed:
 - `/scan`
 - `/odom`
 - `/tf`
+
+These topics enable command input, sensor feedback, and coordinate transforms.
 
 ## 4. Understanding `/cmd_vel`
 
@@ -74,7 +76,8 @@ ros2 topic pub -r 10 /cmd_vel geometry_msgs/msg/TwistStamped "{header: {frame_id
 Key points:
 
 - `-r 10` publishes at 10 Hz.
-- Continuous publishing is required for sustained motion.
+- The controller continues applying the most recent velocity command.
+- Continuous publishing ensures the command remains active and responsive.
 - Velocity commands represent instantaneous control inputs.
 
 ## 6. Stopping the Robot
@@ -94,14 +97,15 @@ ros2 topic pub --once /cmd_vel geometry_msgs/msg/TwistStamped "{header: {frame_i
 Important lesson:
 
 Stopping the publisher does not automatically stop the robot.
+A zero-velocity command must be sent explicitly.
 
 ## 7. Simulation Reset Behavior
 
-Pressing reset in Gazebo can remove the robot from the world.
+Pressing reset in Gazebo can remove dynamically spawned entities.
 
-If that happens, the simulation must be relaunched.
+If the robot was inserted via a launch file or spawn service, a full reset may clear it from the world.
 
-This is normal behavior when entities are spawned through launch files.
+In this case, the simulation must be relaunched to restore the robot.
 
 ## 8. Environment Variables in ROS 2
 

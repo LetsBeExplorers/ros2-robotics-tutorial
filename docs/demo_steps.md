@@ -16,13 +16,6 @@ TurtleBot3 requires the model type to be set before launching.
 export TURTLEBOT3_MODEL=burger
 ~~~
 
-To make this persistent across terminals:
-
-~~~bash
-echo "export TURTLEBOT3_MODEL=burger" >> ~/.bashrc
-source ~/.bashrc
-~~~
-
 Verify:
 
 ~~~bash

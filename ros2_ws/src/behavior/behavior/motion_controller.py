@@ -1,7 +1,7 @@
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import TwistStamped
-
+from geometry_msgs.msg import Twist
+from std_msgs.msg import Float32MultiArray
 
 class MotionController(Node):
 
@@ -10,46 +10,48 @@ class MotionController(Node):
 
         # Publisher for velocity commands
         self.publisher_ = self.create_publisher(
-            TwistStamped,
+            Twist,
             '/cmd_vel',
             10
         )
 
-        # Run timer_callback every 0.1 seconds
+        # Store obstacle sector distances
+        self.left = float('inf')
+        self.front = float('inf')
+        self.right = float('inf')
+
+        # Subscribe to processed obstacle information
+        self.subscription = self.create_subscription(
+            Float32MultiArray,
+            '/obstacle_info',
+            self.obstacle_callback,
+            10
+        )
+
+        # Run control loop at 10 Hz
         self.timer = self.create_timer(0.1, self.timer_callback)
 
-        # Save start time so we can measure elapsed time
-        self.start_time = self.get_clock().now().seconds_nanoseconds()[0]
+    def obstacle_callback(self, msg):
+        # Update sector distances
+        self.left, self.front, self.right = msg.data
 
     def timer_callback(self):
-        # Create a new velocity message
-        msg = TwistStamped()
+        msg = Twist()
 
-        # Required frame for this setup
-        msg.header.frame_id = 'base_link'
-
-        # Calculate how long the node has been running
-        current_time = self.get_clock().now().seconds_nanoseconds()[0]
-        elapsed = current_time - self.start_time
-
-        # Move forward for 5 seconds
-        if elapsed < 5:
-            msg.twist.linear.x = 0.2
-            msg.twist.angular.z = 0.0
-
-        # Rotate for the next 3 seconds
-        elif elapsed < 8:
-            msg.twist.linear.x = 0.0
-            msg.twist.angular.z = 0.3
-
-        # Stop after that
+        # Reactive obstacle avoidance logic
+        if self.front > 0.6:
+            # Path is clear → move forward
+            msg.linear.x = 0.2
+            msg.angular.z = 0.0
         else:
-            msg.twist.linear.x = 0.0
-            msg.twist.angular.z = 0.0
+            # Obstacle ahead → turn toward open side
+            msg.linear.x = 0.0
+            if self.left > self.right:
+                msg.angular.z = 0.6
+            else:
+                msg.angular.z = -0.6
 
-        # Send the command
         self.publisher_.publish(msg)
-
 
 def main(args=None):
     rclpy.init(args=args)
@@ -57,7 +59,6 @@ def main(args=None):
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()

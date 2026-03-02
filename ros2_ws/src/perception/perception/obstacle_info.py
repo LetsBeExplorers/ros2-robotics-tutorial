@@ -28,3 +28,13 @@ def scan_callback(self, msg):
     self.get_logger().info(
         f"L: {left_min:.2f} F: {front_min:.2f} R: {right_min:.2f}"
     )
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = ObstacleAvoidance()
+    rclpy.spin(node)
+    node.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == "__main__":
+    main()

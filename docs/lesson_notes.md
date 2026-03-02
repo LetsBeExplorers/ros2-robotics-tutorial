@@ -1,31 +1,34 @@
 # Lesson Notes – Current Progress
 
-These notes support the portions of the tutorial completed so far.
+These notes document important observations, gotchas, and lessons learned while working through the tutorial.
 
 ## 1. ROS 2 and Simulation
 
-ROS 2 handles communication between different processes (nodes).
-
-Gazebo handles physics and robot simulation.
+- ROS 2 handles communication between nodes.
+- Gazebo handles physics simulation.
 
 In this setup:
-
 - Gazebo simulates the TurtleBot3 robot.
-- ROS 2 allows us to send velocity commands and read sensor data.
+- ROS 2 sends commands and receives sensor data.
+
+Key takeaway:
+ROS and Gazebo are separate systems connected through topics.
 
 ## 2. Launching the Robot
 
-We launched the simulation using:
+Simulation was launched using:
 
 ```
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ```
 
 This:
-
 - Starts Gazebo
 - Spawns the TurtleBot3 model
-- Starts the robot controller and sensor plugins
+- Starts controller and sensor plugins
+
+Gotcha:
+If `TURTLEBOT3_MODEL` is not set, the robot may not spawn.
 
 ## 3. Inspecting Topics
 
@@ -35,8 +38,6 @@ We used:
 ros2 topic list
 ```
 
-to see active topics.
-
 Important topics observed:
 
 - `/cmd_vel`
@@ -44,7 +45,7 @@ Important topics observed:
 - `/odom`
 - `/tf`
 
-These topics enable command input, sensor feedback, and coordinate transforms.
+At this stage, `/cmd_vel` is the most important topic.
 
 ## 4. Understanding `/cmd_vel`
 
@@ -55,103 +56,90 @@ ros2 topic info /cmd_vel
 ```
 
 Output showed:
-
 - Message type: `geometry_msgs/msg/TwistStamped`
-- 1 subscriber (the robot controller)
+- 1 subscriber (robot controller)
 
-Important lesson:
-
-The message type must match exactly when publishing.
-
-Publishing `Twist` did not work because the subscriber expected `TwistStamped`.
+Gotcha:
+Publishing `Twist` does NOT work.
+The message type must match exactly.
 
 ## 5. Publishing Velocity Commands
 
-To move the robot forward:
+To move forward:
 
 ```
 ros2 topic pub -r 10 /cmd_vel geometry_msgs/msg/TwistStamped "{header: {frame_id: 'base_link'}, twist: {linear: {x: 0.2}, angular: {z: 0.0}}}"
 ```
 
-Key points:
-
+Notes:
 - `-r 10` publishes at 10 Hz.
-- The controller continues applying the most recent velocity command.
-- Continuous publishing ensures the command remains active and responsive.
-- Velocity commands represent instantaneous control inputs.
+- The controller keeps applying the last received velocity.
+- Stopping the publisher does NOT stop the robot.
 
 ## 6. Stopping the Robot
 
-When publishing stopped, the robot continued moving.
-
-Reason:
-
-The controller continued applying the last received velocity.
-
-To stop the robot, we explicitly sent zero velocity:
+To stop:
 
 ```
 ros2 topic pub --once /cmd_vel geometry_msgs/msg/TwistStamped "{header: {frame_id: 'base_link'}, twist: {linear: {x: 0.0}, angular: {z: 0.0}}}"
 ```
 
 Important lesson:
-
-Stopping the publisher does not automatically stop the robot.
-A zero-velocity command must be sent explicitly.
+You must explicitly send zero velocity.
 
 ## 7. Simulation Reset Behavior
 
-Pressing reset in Gazebo can remove dynamically spawned entities.
+Pressing reset in Gazebo can remove the robot.
 
-If the robot was inserted via a launch file or spawn service, a full reset may clear it from the world.
+If that happens:
+- Relaunch the simulation.
 
-In this case, the simulation must be relaunched to restore the robot.
+## 8. Environment Variables
 
-## 8. Environment Variables in ROS 2
+TurtleBot3 requires:
 
-Some ROS launch files depend on environment variables.
+```
+TURTLEBOT3_MODEL=burger
+```
 
-In this case, TurtleBot3 requires:
+If not set:
+- Robot may not spawn.
 
-TURTLEBOT3_MODEL
+Environment variables set with `export` only apply to the current terminal session.
+Add to `~/.bashrc` to make permanent.
 
-If this variable is not set, the world may launch without spawning the robot.
+## 9. Custom Motion Controller Node
 
-Environment variables set using `export` only persist for the current terminal session.
+A Python node (`motion_controller.py`) was created to automate motion.
 
-To make them permanent, add them to `~/.bashrc`.
+Important concepts learned:
 
-## 9. Understanding `/scan` (LaserScan Data)
+- `super().__init__('motion_controller')` initializes the ROS node.
+- `self.create_publisher()` registers a publisher.
+- `self.create_timer()` runs a function at fixed intervals.
+- `if __name__ == '__main__':` ensures `main()` runs only when executed directly.
 
-The `/scan` topic publishes messages of type:
+Gotcha:
+The node must be registered in `setup.py` using:
 
-`sensor_msgs/msg/LaserScan`
+```
+entry_points={
+    'console_scripts': [
+        'motion_controller = platform_interface.motion_controller:main',
+    ],
+}
+```
 
-This represents distance measurements from a 2D LiDAR sensor mounted on the robot.
+Without this, `ros2 run` will not find the node.
 
-Key fields in the message:
+After editing code:
+- Run `colcon build`
+- Then `source install/setup.bash`
 
-- `ranges[]` – array of distance values (in meters)
-- `angle_min` – starting scan angle
-- `angle_max` – ending scan angle
-- `angle_increment` – spacing between measurements
+## 10. Note on `/scan`
 
-The `ranges[]` array contains one distance value per laser beam.
+The `/scan` topic publishes LiDAR distance data (`sensor_msgs/msg/LaserScan`).
 
-Each value represents:
+We have not used it yet.
 
-> The distance to the nearest obstacle in that direction.
-
-### Interpreting Values
-
-- `inf` means no obstacle detected within the sensor’s maximum range.
-- Small finite numbers (e.g., 0.4, 0.6) indicate nearby objects.
-- As the robot rotates, different beams detect different objects.
-- As the robot approaches a wall, some values decrease.
-
-Important concept:
-
-The sensor does not identify objects.
-It only provides raw distance measurements.
-
-Autonomous behavior must interpret these values to decide how to move.
+It will be used later for obstacle detection.

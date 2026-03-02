@@ -4,7 +4,6 @@ from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Float32MultiArray
 import math
 
-
 # Perception node: processes raw LiDAR data into left/front/right distances
 class ObstacleAvoidance(Node):
 
@@ -65,14 +64,12 @@ class ObstacleAvoidance(Node):
         msg_out.data = [left_min, front_min, right_min]
         self.publisher.publish(msg_out)
 
-
 def main(args=None):
     rclpy.init(args=args)
     node = ObstacleAvoidance()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
-
 
 if __name__ == "__main__":
     main()

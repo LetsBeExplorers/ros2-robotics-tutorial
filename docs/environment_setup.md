@@ -130,13 +130,40 @@ Then open a new terminal and relaunch the simulation.
 
 ## 8. Build the ROS 2 Workspace
 
-!!! IMPORTANT: ROS 2 must use the system Python interpreter.
-!!! If Conda is active, it can interfere with `colcon build`.
+!!! IMPORTANT: ROS 2 must use the system Python interpreter.  
+!!! If Conda is active, it can interfere with colcon build.
 
 Check if Conda is active:
 
-```bash
+~~~bash
 echo $CONDA_DEFAULT_ENV
+~~~
+
+If anything is printed (e.g., base), deactivate it:
+
+~~~bash
+conda deactivate
+~~~
+
+Verify the correct Python interpreter:
+
+~~~bash
+which python3
+~~~
+
+Expected output:
+
+~~~
+/usr/bin/python3
+~~~
+
+Now build the workspace:
+
+~~~bash
+cd ros2_ws
+colcon build
+~~~
+
 ## 9. Source the Workspace
 
 After building:

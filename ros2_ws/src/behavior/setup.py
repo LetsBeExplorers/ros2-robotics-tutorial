@@ -24,7 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'motion_controller = perception.motion_controller:main',
+            'motion_controller = behavior.motion_controller:main',
         ],
     },
 )

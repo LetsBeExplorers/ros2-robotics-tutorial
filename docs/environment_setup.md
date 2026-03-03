@@ -130,13 +130,13 @@ Then open a new terminal and relaunch the simulation.
 
 ## 8. Build the ROS 2 Workspace
 
-After cloning the repository, navigate to the workspace directory:
+!!! IMPORTANT: ROS 2 must use the system Python interpreter.
+!!! If Conda is active, it can interfere with `colcon build`.
+
+Check if Conda is active:
 
 ```bash
-cd ros2_ws
-colcon build
-```
-
+echo $CONDA_DEFAULT_ENV
 ## 9. Source the Workspace
 
 After building:

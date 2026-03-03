@@ -2,6 +2,15 @@
 
 This document outlines the exact commands and sequence used during the recorded tutorial.
 
+## 0. Clean Simulation State
+
+Prevent multiple gazebo instances:
+
+~~~bash
+pkill -9 -f "gz sim"
+~~~
+
+
 ## 1. Source ROS 2
 
 ~~~bash

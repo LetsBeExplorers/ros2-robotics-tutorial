@@ -36,22 +36,17 @@ class MotionController(Node):
         self.left, self.front, self.right = msg.data
 
     def timer_callback(self):
+        self.get_logger().info("Timer alive")
         msg = Twist()
 
-        # Reactive obstacle avoidance logic
-        if self.front > 0.6:
-            # Path is clear → move forward
-            msg.linear.x = 0.2
-            msg.angular.z = 0.0
-        else:
-            # Obstacle ahead → turn toward open side
-            msg.linear.x = 0.0
-            if self.left > self.right:
-                msg.angular.z = 0.6
-            else:
-                msg.angular.z = -0.6
+        danger = 0.4
+        caution = 0.8
 
-        self.publisher_.publish(msg)
+        if self.front < danger:
+            self.get_logger().info("Danger!")
+
+        elif self.front < caution:
+            self.get_logger().info("Caution!")
 
 def main(args=None):
     rclpy.init(args=args)

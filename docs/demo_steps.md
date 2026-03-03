@@ -1,15 +1,18 @@
-# Live Demo Steps
+# Live Demo
 
-This document outlines the exact commands and sequence used during the recorded tutorial.
+This demo demonstrates a layered ROS 2 architecture implementing reactive obstacle avoidance using TurtleBot3 in Gazebo.
+
+---
 
 ## 0. Clean Simulation State
 
-Prevent multiple gazebo instances:
+Prevent multiple Gazebo instances:
 
 ~~~bash
 pkill -9 -f "gz sim"
 ~~~
 
+---
 
 ## 1. Source ROS 2
 
@@ -17,104 +20,119 @@ pkill -9 -f "gz sim"
 source /opt/ros/jazzy/setup.bash
 ~~~
 
-## 2. Set TurtleBot3 Model
+---
 
-TurtleBot3 requires the model type to be set before launching.
+## 2. Build and Source Workspace
+
+~~~bash
+cd ros2_ws
+colcon build
+source install/setup.bash
+~~~
+
+---
+
+## 3. Set TurtleBot3 Model
 
 ~~~bash
 export TURTLEBOT3_MODEL=burger
 ~~~
 
-Verify:
+---
 
-~~~bash
-echo $TURTLEBOT3_MODEL
-~~~
-
-Expected output:
-
-~~~
-burger
-~~~
-
-## 3. Launch Simulation World
+## 4. Launch Simulation World
 
 ~~~bash
 ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
 ~~~
 
-Wait for Gazebo to open and ensure simulation is running.
+Wait until Gazebo fully loads.
 
-## 4. Verify Available Topics
+---
 
-~~~bash
-ros2 topic list
-~~~
+## 5. Run Perception Node
 
-Discuss:
-- `/cmd_vel`
-- `/scan`
-- `/odom`
-- `/tf`
-
-## 5. Inspect Command Velocity Topic
+In a new terminal:
 
 ~~~bash
-ros2 topic info /cmd_vel
+source /opt/ros/jazzy/setup.bash
+source ros2_ws/install/setup.bash
+ros2 run perception obstacle_avoidance
 ~~~
 
 Explain:
-- Message type (`geometry_msgs/msg/TwistStamped`)
-- Subscriber count (should be 1)
-- Publisher count (0 before publishing commands)
+- Subscribes to `/scan`
+- Divides LiDAR into left/front/right sectors
+- Publishes `/obstacle_info`
 
-## 6. Move Robot Forward
-
-~~~bash
-ros2 topic pub -r 10 /cmd_vel geometry_msgs/msg/TwistStamped "{header: {frame_id: 'base_link'}, twist: {linear: {x: 0.2}, angular: {z: 0.0}}}"
-~~~
-
-Stop with `Ctrl + C`.
-
-## 7. Stop Robot Explicitly
+Verify:
 
 ~~~bash
-ros2 topic pub --once /cmd_vel geometry_msgs/msg/TwistStamped "{header: {frame_id: 'base_link'}, twist: {linear: {x: 0.0}, angular: {z: 0.0}}}"
+ros2 topic echo /obstacle_info
 ~~~
 
-Discuss:
-- Controllers maintain the last commanded velocity.
-- The robot will continue moving unless a zero velocity command is sent.
-- Always explicitly send a stop command.
+---
 
-## 8. Rotate Robot to Observe Sensor Changes
+## 6. Run Behavior Node
+
+In another terminal:
 
 ~~~bash
-ros2 topic pub -r 5 /cmd_vel geometry_msgs/msg/TwistStamped "{header: {frame_id: 'base_link'}, twist: {linear: {x: 0.0}, angular: {z: 0.3}}}"
+source /opt/ros/jazzy/setup.bash
+source ros2_ws/install/setup.bash
+ros2 run behavior motion_controller
 ~~~
 
-Open a new terminal:
-
-~~~bash
-ros2 topic echo /scan
-~~~
-
-Stop rotation with `Ctrl + C` and send zero velocity again.
-
-## 9. Inspect LaserScan Data
-
-Discuss:
-- `ranges[]` array
-- `inf` values (no obstacle detected)
-- Finite values (distance in meters)
-- How values change as the robot rotates
-- How LiDAR enables obstacle detection
-
-## 10. Demonstrate Understanding
+The robot should begin autonomous navigation.
 
 Explain:
-- `/cmd_vel` controls robot motion.
-- `/scan` provides LiDAR data.
-- `/odom` provides odometry feedback.
-- `/tf` handles coordinate transforms.
-- ROS 2 uses topic-based communication between nodes.
+- 10 Hz control loop
+- Dual-zone logic (safe / caution / danger)
+- Steering based on left-right comparison
+- Fully reactive (no map, no global planner)
+
+---
+
+## 7. Inspect Command Velocity
+
+~~~bash
+ros2 topic echo /cmd_vel
+~~~
+
+Explain:
+- Linear velocity depends on front distance
+- Angular velocity depends on sector comparison
+- Closed-loop control
+
+---
+
+## 8. Demonstrate Reactive Behavior
+
+Drive near:
+- Wall
+- Pillar
+- Corner
+
+Explain:
+- Slows in caution zone
+- Turns strongly in danger zone
+- Continuously adapts to sensor input
+
+---
+
+## 9. Architecture Overview
+
+Pipeline:
+
+/scan  
+→ perception (obstacle_avoidance)  
+→ /obstacle_info  
+→ behavior (motion_controller)  
+→ /cmd_vel  
+→ robot  
+
+Design principles:
+- Layered architecture
+- Topic-based communication
+- Reactive obstacle avoidance
+- Closed-loop control

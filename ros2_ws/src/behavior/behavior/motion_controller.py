@@ -1,6 +1,6 @@
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import TwistStamped
 from std_msgs.msg import Float32MultiArray
 
 class MotionController(Node):
@@ -10,7 +10,7 @@ class MotionController(Node):
 
         # Publisher for velocity commands
         self.publisher_ = self.create_publisher(
-            Twist,
+            TwistStamped,
             '/cmd_vel',
             10
         )
@@ -37,16 +37,36 @@ class MotionController(Node):
 
     def timer_callback(self):
         self.get_logger().info("Timer alive")
-        msg = Twist()
+        msg = TwistStamped()
 
-        danger = 0.4
-        caution = 0.8
+        danger = 0.2
+        caution = 0.4
 
         if self.front < danger:
-            self.get_logger().info("Danger!")
+            self.get_logger().info("Danger Front!")
 
         elif self.front < caution:
-            self.get_logger().info("Caution!")
+            self.get_logger().info("Caution Front!")
+
+        elif self.left < danger:
+            self.get_logger().info("Danger Left!")
+
+        elif self.left < caution:
+            self.get_logger().info("Caution Left!")
+
+        elif self.right < danger:
+            self.get_logger().info("Danger Right!")
+
+        elif self.right < caution:
+            self.get_logger().info("Caution Right!")
+
+        msg.header.stamp = self.get_clock().now().to_msg()
+        msg.header.frame_id = "base_link"
+
+        msg.twist.linear.x = 0.2
+        msg.twist.angular.z = 0.0
+
+        self.publisher_.publish(msg)
 
 def main(args=None):
     rclpy.init(args=args)

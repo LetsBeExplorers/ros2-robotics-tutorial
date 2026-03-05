@@ -36,7 +36,6 @@ class MotionController(Node):
         self.left, self.front, self.right = msg.data
 
     def timer_callback(self):
-        self.get_logger().info("Timer alive")
         msg = TwistStamped()
 
         danger = 0.2

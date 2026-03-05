@@ -54,11 +54,6 @@ class ObstacleAvoidance(Node):
             elif -math.radians(90) <= angle < -math.radians(30):
                 right_min = min(right_min, distance)
 
-        # Debug output
-        self.get_logger().info(
-            f"L: {left_min:.2f} F: {front_min:.2f} R: {right_min:.2f}"
-        )
-
         # Publish sector distances
         msg_out = Float32MultiArray()
         msg_out.data = [left_min, front_min, right_min]

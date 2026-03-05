@@ -13,7 +13,7 @@ source install/setup.bash
 
 echo "Starting nodes..."
 
-ros2 run perception obstacle_processor &
+ros2 run perception obstacle_avoidance &
 ros2 run behavior motion_controller &
 
 wait

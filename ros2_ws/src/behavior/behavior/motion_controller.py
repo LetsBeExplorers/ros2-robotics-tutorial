@@ -40,20 +40,23 @@ class MotionController(Node):
 
         danger = 0.2
 
+        msg.twist.linear.x = 0.2
+        msg.twist.angular.z = 0.0
+
         if self.front < danger:
             self.get_logger().info("Danger Front!")
+            msg.twist.linear.x = 0.0
 
         elif self.left < danger:
             self.get_logger().info("Danger Left!")
+            msg.twist.linear.x = 0.0
 
         elif self.right < danger:
             self.get_logger().info("Danger Right!")
+            msg.twist.linear.x = 0.0
 
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.header.frame_id = "base_link"
-
-        msg.twist.linear.x = 0.2
-        msg.twist.angular.z = 0.0
 
         self.publisher_.publish(msg)
 

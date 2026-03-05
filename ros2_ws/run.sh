@@ -1,6 +1,16 @@
 #!/bin/bash
 
-trap "echo 'Stopping nodes...'; kill 0" SIGINT
+stop_robot() {
+    echo "Stopping robot..."
+
+    ros2 topic pub --once /cmd_vel geometry_msgs/msg/TwistStamped \
+    "{twist: {linear: {x: 0.0}, angular: {z: 0.0}}}"
+
+    echo "Stopping nodes..."
+    kill 0
+}
+
+trap stop_robot SIGINT
 
 echo "Killing old ROS processes..."
 pkill -f ros2 2>/dev/null

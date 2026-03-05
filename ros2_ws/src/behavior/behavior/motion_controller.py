@@ -40,25 +40,15 @@ class MotionController(Node):
         msg = TwistStamped()
 
         danger = 0.2
-        caution = 0.4
 
         if self.front < danger:
             self.get_logger().info("Danger Front!")
 
-        elif self.front < caution:
-            self.get_logger().info("Caution Front!")
-
         elif self.left < danger:
             self.get_logger().info("Danger Left!")
 
-        elif self.left < caution:
-            self.get_logger().info("Caution Left!")
-
         elif self.right < danger:
             self.get_logger().info("Danger Right!")
-
-        elif self.right < caution:
-            self.get_logger().info("Caution Right!")
 
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.header.frame_id = "base_link"

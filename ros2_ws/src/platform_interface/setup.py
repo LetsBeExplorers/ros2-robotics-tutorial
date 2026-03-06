@@ -24,6 +24,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'platform_interface = platform_interface.platform_interface:main',
         ],
     },
 )

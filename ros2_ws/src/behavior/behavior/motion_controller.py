@@ -11,7 +11,7 @@ class MotionController(Node):
         # Publisher for velocity commands
         self.publisher_ = self.create_publisher(
             TwistStamped,
-            '/cmd_vel',
+            '/robot_command',
             10
         )
 

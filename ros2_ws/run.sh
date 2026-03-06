@@ -12,8 +12,9 @@ stop_robot() {
 
 trap stop_robot SIGINT
 
-echo "Killing old ROS processes..."
-pkill -f ros2 2>/dev/null
+echo "Killing old ROS & Gazebo processes..."
+pkill -9 -f ros
+pkill -9 -f gz
 
 echo "Building workspace..."
 colcon build --symlink-install

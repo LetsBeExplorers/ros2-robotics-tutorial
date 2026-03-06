@@ -9,6 +9,7 @@ stop_robot() {
     echo "Stopping nodes..."
     pkill -f motion_controller
     pkill -f obstacle_avoidance
+    pkill -f platform_interface
 }
 
 trap stop_robot SIGINT

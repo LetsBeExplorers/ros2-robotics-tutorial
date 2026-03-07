@@ -23,6 +23,8 @@ class MotionController(Node):
         self.front_left = float('inf')
         self.front_right = float('inf')
 
+        self.turn_direction = 0  # remembers chosen turn direction
+
         # Subscribe to processed obstacle information
         self.subscription = self.create_subscription(
             Float32MultiArray,
@@ -79,8 +81,17 @@ class MotionController(Node):
         # Front obstacle
         elif self.front < danger:
             self.get_logger().info("FRONT DANGER")
+
             linear = 0.0
-            angular = turn_speed
+
+            # If not already turning, choose direction
+            if self.turn_direction == 0:
+                if self.left > self.right:
+                    self.turn_direction = 1   # left
+                else:
+                    self.turn_direction = -1  # right
+
+            angular = turn_speed * self.turn_direction
 
         # Left side obstacle
         elif self.left < side_danger:
@@ -102,6 +113,10 @@ class MotionController(Node):
 
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.header.frame_id = "base_link"
+
+        # Reset turning memory once obstacle cleared
+        if self.front > danger:
+            self.turn_direction = 0
 
         self.publisher_.publish(msg)
 

@@ -11,6 +11,11 @@ class ObstacleAvoidance(Node):
     def __init__(self):
         super().__init__('obstacle_avoidance')
 
+        # Declare perception parameters (degrees)
+        self.front_angle = math.radians(self.declare_parameter('front_angle_deg', 45.0).value)
+        self.corner_angle = math.radians(self.declare_parameter('corner_angle_deg', 70.0).value)
+        self.side_angle = math.radians(self.declare_parameter('side_angle_deg', 120.0).value)
+
         # Subscribe to LiDAR scan data
         self.subscription = self.create_subscription(
             LaserScan,
@@ -49,26 +54,26 @@ class ObstacleAvoidance(Node):
             if angle > math.pi:
                 angle -= 2 * math.pi
 
-            # Front-left corner (45° to 70°)
-            if math.radians(45) < angle <= math.radians(70):
+            # Front-left corner
+            if self.front_angle < angle <= self.corner_angle:
                 front_left_min = min(front_left_min, distance)
                 left_min = min(left_min, distance)
 
-            # Front-right corner (-70° to -45°)
-            elif -math.radians(70) <= angle < -math.radians(45):
+            # Front-right corner
+            elif -self.corner_angle <= angle < -self.front_angle:
                 front_right_min = min(front_right_min, distance)
                 right_min = min(right_min, distance)
 
-            # Front sector (-45° to +45°)
-            elif -math.radians(45) <= angle <= math.radians(45):
+            # Front sector
+            elif -self.front_angle <= angle <= self.front_angle:
                 front_min = min(front_min, distance)
 
-            # Left sector (70° to 120°)
-            elif math.radians(70) < angle <= math.radians(120):
+            # Left sector
+            elif self.corner_angle < angle <= self.side_angle:
                 left_min = min(left_min, distance)
 
-            # Right sector (-120° to -70°)
-            elif -math.radians(120) <= angle < -math.radians(70):
+            # Right sector
+            elif -self.side_angle <= angle < -self.corner_angle:
                 right_min = min(right_min, distance)
 
         # Publish sector distances

@@ -48,7 +48,7 @@ Verify Gazebo installation:
 gz sim --versions
 ```
 
-Expected output should display version 8.x.x (Harmonic).
+Expected output should display version **8.x.x (Harmonic)**.
 
 If Gazebo is not installed:
 
@@ -107,7 +107,7 @@ Expected output:
 burger
 ```
 
-## 6. Launch Simulation
+## 6. Launch Simulation (Manual Method)
 
 Start the official TurtleBot3 Gazebo world:
 
@@ -130,39 +130,50 @@ Then open a new terminal and relaunch the simulation.
 
 ## 8. Build the ROS 2 Workspace
 
-!!! IMPORTANT: ROS 2 must use the system Python interpreter.  
-!!! If Conda is active, it can interfere with colcon build.
+First navigate to your workspace:
 
-Check if Conda is active:
+```bash
+cd ros2_ws
+```
 
-~~~bash
+Build the workspace:
+
+```bash
+colcon build
+```
+
+### Note: Conda Environments and ROS 2
+
+ROS 2 requires the system Python interpreter to function correctly.  
+If a Conda environment is active, it may interfere with `colcon build`, ROS packages, and Gazebo integration.
+
+#### Check if Conda is Active
+
+```bash
 echo $CONDA_DEFAULT_ENV
-~~~
+```
 
-If anything is printed (e.g., base), deactivate it:
+If a name appears (such as `base`), Conda is active.
 
-~~~bash
+#### Temporarily Deactivate Conda
+
+```bash
 conda deactivate
-~~~
+```
 
-Verify the correct Python interpreter:
+#### Verify Correct Python Interpreter
 
-~~~bash
+```bash
 which python3
-~~~
+```
 
 Expected output:
 
-~~~
+```
 /usr/bin/python3
-~~~
+```
 
-Now build the workspace:
-
-~~~bash
-cd ros2_ws
-colcon build
-~~~
+If the path includes `miniconda` or `anaconda`, Conda is still active.
 
 ## 9. Source the Workspace
 

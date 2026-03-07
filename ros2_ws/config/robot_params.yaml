@@ -5,3 +5,8 @@ motion_controller:
     corner_danger: 0.26
     forward_speed: 0.25
     turn_speed: 0.8
+obstacle_avoidance:
+  ros__parameters:
+    front_angle_deg: 45.0
+    corner_angle_deg: 70.0
+    side_angle_deg: 120.0

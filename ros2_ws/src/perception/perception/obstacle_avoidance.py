@@ -54,6 +54,17 @@ class ObstacleAvoidance(Node):
             # Right sector (-120° to -45°)
             elif -math.radians(120) <= angle < -math.radians(45):
                 right_min = min(right_min, distance)
+
+        robot_radius = 0.06  # TurtleBot3 Burger effective radius
+
+        front_min -= robot_radius
+        left_min  -= robot_radius
+        right_min -= robot_radius
+
+        # Prevent negatives
+        front_min = max(front_min, 0.0)
+        left_min  = max(left_min, 0.0)
+        right_min = max(right_min, 0.0)
     
         # Publish sector distances
         msg_out = Float32MultiArray()

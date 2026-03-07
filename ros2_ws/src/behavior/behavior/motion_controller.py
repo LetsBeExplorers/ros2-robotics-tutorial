@@ -67,13 +67,13 @@ class MotionController(Node):
         # Front left obstacle
         if self.front_left < corner_danger:
             self.get_logger().info("TURNING RIGHT — Front Left Danger")
-            linear = 0.05
+            linear = 0.0 
             angular = -turn_speed   # turn right hard
 
         # Front right obstacle
         elif self.front_right < corner_danger:
             self.get_logger().info("TURNING RIGHT — Front Left Danger")
-            linear = 0.05
+            linear = 0.0 
             angular = turn_speed    # turn left hard
 
         # Front obstacle

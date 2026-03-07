@@ -53,9 +53,9 @@ class MotionController(Node):
         msg = TwistStamped()
 
         # Danger distance thresholds
-        danger = 0.25
-        side_danger = 0.35
-        corner_danger = 0.40
+        danger = 0.2
+        side_danger = 0.15
+        corner_danger = 0.2
 
         forward_speed = 0.25
         turn_speed = 0.8

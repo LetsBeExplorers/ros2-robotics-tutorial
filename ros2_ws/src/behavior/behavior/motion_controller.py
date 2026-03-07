@@ -45,23 +45,29 @@ class MotionController(Node):
     def timer_callback(self):
         msg = TwistStamped()
 
+        # Danger distance thresholds
         danger = 0.25
+        side_danger = 0.35
+        corner_danger = 0.40
+
         forward_speed = 0.25
         turn_speed = 0.8
-        corner_danger = 0.3
 
         # Default: move forward
         linear = forward_speed
         angular = 0.0
 
+        # Front left obstacle
         if self.front_left < corner_danger:
             linear = 0.05
             angular = -turn_speed   # turn right hard
 
+        # Front right obstacle
         elif self.front_right < corner_danger:
             linear = 0.05
             angular = turn_speed    # turn left hard
 
+        # Front obstacle
         elif self.front < danger:
             # Turn toward clearer side
             linear = 0.0
@@ -70,14 +76,17 @@ class MotionController(Node):
             else:
                 angular = -turn_speed
 
-        elif self.left < danger:
-            linear = 0.1
+        # Left side obstacle
+        elif self.left < side_danger:
+            linear = 0.0 
             angular = -turn_speed * 0.5
 
-        elif self.right < danger:
-            linear = 0.1
+        # Right side obstacle
+        elif self.right < side_danger:
+            linear = 0.0
             angular = turn_speed * 0.5
 
+        # Speeds actually set here after decision
         msg.twist.linear.x = linear
         msg.twist.angular.z = angular
 

@@ -57,7 +57,7 @@ class MotionController(Node):
         # Danger distance thresholds
         danger = 0.2
         side_danger = 0.15
-        corner_danger = 0.2
+        corner_danger = 0.25
 
         forward_speed = 0.25
         turn_speed = 0.8

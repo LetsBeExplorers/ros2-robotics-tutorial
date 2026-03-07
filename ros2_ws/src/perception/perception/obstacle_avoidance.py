@@ -43,18 +43,18 @@ class ObstacleAvoidance(Node):
             # Convert index to angle
             angle = msg.angle_min + i * msg.angle_increment
 
-            # Front sector (-30° to 30°)
-            if -math.radians(30) <= angle <= math.radians(30):
+            # Front sector (-45° to 45°)
+            if -math.radians(45) <= angle <= math.radians(45):
                 front_min = min(front_min, distance)
 
-            # Left sector (30° to 90°)
-            elif math.radians(30) < angle <= math.radians(90):
+            # Left sector (45° to 120°)
+            elif math.radians(45) < angle <= math.radians(120):
                 left_min = min(left_min, distance)
 
-            # Right sector (-90° to -30°)
-            elif -math.radians(90) <= angle < -math.radians(30):
+            # Right sector (-120° to -45°)
+            elif -math.radians(120) <= angle < -math.radians(45):
                 right_min = min(right_min, distance)
-
+    
         # Publish sector distances
         msg_out = Float32MultiArray()
         msg_out.data = [left_min, front_min, right_min]

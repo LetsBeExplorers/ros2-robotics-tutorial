@@ -43,7 +43,7 @@ sleep 4
 echo "Starting nodes..."
 ros2 run platform_interface platform_interface &
 ros2 run perception obstacle_avoidance &
-ros2 run behavior motion_controller &
-
+ros2 run behavior motion_controller \
+  --ros-args --params-file config/robot_params.yaml &
 
 wait

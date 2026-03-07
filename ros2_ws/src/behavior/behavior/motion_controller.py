@@ -16,6 +16,13 @@ class MotionController(Node):
             10
         )
 
+        # Declare parameters and store their values
+        self.danger = self.declare_parameter('danger', 0.2).value
+        self.side_danger = self.declare_parameter('side_danger', 0.15).value
+        self.corner_danger = self.declare_parameter('corner_danger', 0.25).value
+        self.forward_speed = self.declare_parameter('forward_speed', 0.25).value
+        self.turn_speed = self.declare_parameter('turn_speed', 0.8).value
+
         # Store obstacle sector distances
         self.left = float('inf')
         self.front = float('inf')
@@ -47,30 +54,22 @@ class MotionController(Node):
     def timer_callback(self):
         msg = TwistStamped()
 
-        # Danger distance thresholds
-        danger = 0.2
-        side_danger = 0.15
-        corner_danger = 0.25
-
-        forward_speed = 0.25
-        turn_speed = 0.8
-
         # Default: move forward
-        linear = forward_speed
+        linear = self.forward_speed
         angular = 0.0
 
         # Front left obstacle
-        if self.front_left < corner_danger:
+        if self.front_left < self.corner_danger:
             linear = 0.0 
-            angular = -turn_speed   # turn right hard
+            angular = -self.turn_speed   # turn right hard
 
         # Front right obstacle
-        elif self.front_right < corner_danger:
+        elif self.front_right < self.corner_danger:
             linear = 0.0 
-            angular = turn_speed    # turn left hard
+            angular = self.turn_speed    # turn left hard
 
         # Front obstacle
-        elif self.front < danger:
+        elif self.front < self.danger:
             linear = 0.0
 
             # If not already turning, choose direction
@@ -80,17 +79,17 @@ class MotionController(Node):
                 else:
                     self.turn_direction = -1  # right
 
-            angular = turn_speed * self.turn_direction
+            angular = self.turn_speed * self.turn_direction
 
         # Left side obstacle
-        elif self.left < side_danger:
+        elif self.left < self.side_danger:
             linear = 0.0 
-            angular = -turn_speed * 0.5
+            angular = -self.turn_speed * 0.5
 
         # Right side obstacle
-        elif self.right < side_danger:
+        elif self.right < self.side_danger:
             linear = 0.0
-            angular = turn_speed * 0.5
+            angular = self.turn_speed * 0.5
 
         # Speeds actually set here after decision
         msg.twist.linear.x = linear
@@ -100,7 +99,7 @@ class MotionController(Node):
         msg.header.frame_id = "base_link"
 
         # Reset turning memory once obstacle cleared
-        if self.front > danger:
+        if self.front > self.danger:
             self.turn_direction = 0
 
         self.publisher_.publish(msg)

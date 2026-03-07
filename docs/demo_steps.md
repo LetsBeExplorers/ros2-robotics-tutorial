@@ -1,138 +1,118 @@
-# Live Demo
+# Live Demo Steps — ROS 2 Reactive Obstacle Avoidance
 
-This demo demonstrates a layered ROS 2 architecture implementing reactive obstacle avoidance using TurtleBot3 in Gazebo.
+This guide lists the exact commands and actions used during the recorded tutorial.
 
----
+## 1. Show ROS 2 Environment
 
-## 0. Clean Simulation State
+Display OS and ROS version:
 
-Prevent multiple Gazebo instances:
+```bash
+lsb_release -a
+ros2 --version
+```
 
-~~~bash
-pkill -9 -f "gz sim"
-~~~
+## 2. Show Workspace Structure
 
----
-
-## 1. Source ROS 2
-
-~~~bash
-source /opt/ros/jazzy/setup.bash
-~~~
-
----
-
-## 2. Build and Source Workspace
-
-~~~bash
+```bash
 cd ros2_ws
-colcon build
+tree -L 2
+```
+
+Explain packages and folder organization.
+
+## 3. Build Workspace
+
+```bash
+colcon build --symlink-install
 source install/setup.bash
-~~~
+```
 
----
+## 4. Launch Simulation
 
-## 3. Set TurtleBot3 Model
+```bash
+./start_sim.sh
+```
 
-~~~bash
-export TURTLEBOT3_MODEL=burger
-~~~
+Wait for Gazebo to fully load.
 
----
+## 5. Launch Autonomy Stack
 
-## 4. Launch Simulation World
+Open new terminal:
 
-~~~bash
-ros2 launch turtlebot3_gazebo turtlebot3_world.launch.py
-~~~
+```bash
+./run.sh
+```
 
-Wait until Gazebo fully loads.
+Robot should begin autonomous movement.
 
----
+## 6. ROS 2 Core Tools
 
-## 5. Run Perception Node
+### List Topics
 
-In a new terminal:
+```bash
+ros2 topic list
+```
 
-~~~bash
-source /opt/ros/jazzy/setup.bash
-source ros2_ws/install/setup.bash
-ros2 run perception obstacle_avoidance
-~~~
+### Inspect LiDAR Sensor
 
-Explain:
-- Subscribes to `/scan`
-- Divides LiDAR into left/front/right sectors
-- Publishes `/obstacle_info`
+```bash
+ros2 topic echo /scan
+```
 
-Verify:
+### Inspect Processed Obstacle Data
 
-~~~bash
+```bash
 ros2 topic echo /obstacle_info
-~~~
+```
 
----
+### Inspect Velocity Commands
 
-## 6. Run Behavior Node
-
-In another terminal:
-
-~~~bash
-source /opt/ros/jazzy/setup.bash
-source ros2_ws/install/setup.bash
-ros2 run behavior motion_controller
-~~~
-
-The robot should begin autonomous navigation.
-
-Explain:
-- 10 Hz control loop
-- Dual-zone logic (safe / caution / danger)
-- Steering based on left-right comparison
-- Fully reactive (no map, no global planner)
-
----
-
-## 7. Inspect Command Velocity
-
-~~~bash
+```bash
 ros2 topic echo /cmd_vel
-~~~
+```
 
-Explain:
-- Linear velocity depends on front distance
-- Angular velocity depends on sector comparison
-- Closed-loop control
+### View Topic Information
 
----
+```bash
+ros2 topic info /cmd_vel
+```
 
-## 8. Demonstrate Reactive Behavior
+### Visualize ROS Graph
 
-Drive near:
-- Wall
-- Pillar
-- Corner
+```bash
+rqt_graph
+```
 
-Explain:
-- Slows in caution zone
-- Turns strongly in danger zone
-- Continuously adapts to sensor input
+## 7. Demonstrate Robot Motion Control
 
----
+Observe robot moving autonomously in Gazebo.
 
-## 9. Architecture Overview
+Explain `/cmd_vel` interface:
+- Linear velocity controls forward motion
+- Angular velocity controls turning
 
-Pipeline:
+## 8. Demonstrate Sensor-Driven Behavior
 
-/scan  
-→ perception (obstacle_avoidance)  
-→ /obstacle_info  
-→ behavior (motion_controller)  
-→ /cmd_vel  
-→ robot  
+Move robot near obstacles:
+- Walls
+- Corners
+- Tight passages
 
-Design principles:
-- Layered architecture
-- Topic-based communication
-- Reactive obstacle avoidance
-- Closed-loop control
+Observe real-time obstacle avoidance.
+
+## 9. Code Walkthrough (No Commands)
+
+Open source files and explain:
+- Perception node
+- Behavior node
+- Platform interface node
+
+## 10. Safe Shutdown
+
+Press:
+
+```
+Ctrl + C
+```
+
+Scripts safely stop robot and terminate nodes.

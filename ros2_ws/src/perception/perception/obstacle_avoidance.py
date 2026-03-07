@@ -32,6 +32,8 @@ class ObstacleAvoidance(Node):
         left_min = float('inf')
         front_min = float('inf')
         right_min = float('inf')
+        front_left_min = float('inf')
+        front_right_min = float('inf')
 
         # Iterate through all LiDAR measurements
         for i, distance in enumerate(msg.ranges):
@@ -43,8 +45,18 @@ class ObstacleAvoidance(Node):
             # Convert index to angle
             angle = msg.angle_min + i * msg.angle_increment
 
+            # Front-left corner (20° to 45°)
+            if math.radians(20) < angle <= math.radians(45):
+                front_left_min = min(front_left_min, distance)
+                left_min = min(left_min, distance)
+
+            # Front-right corner (-45° to -20°)
+            elif -math.radians(45) <= angle < -math.radians(20):
+                front_right_min = min(front_right_min, distance)
+                right_min = min(right_min, distance)
+    
             # Front sector (-45° to 45°)
-            if -math.radians(45) <= angle <= math.radians(45):
+            elif -math.radians(45) <= angle <= math.radians(45):
                 front_min = min(front_min, distance)
 
             # Left sector (45° to 120°)
@@ -55,20 +67,9 @@ class ObstacleAvoidance(Node):
             elif -math.radians(120) <= angle < -math.radians(45):
                 right_min = min(right_min, distance)
 
-        robot_radius = 0.06  # TurtleBot3 Burger effective radius
-
-        front_min -= robot_radius
-        left_min  -= robot_radius
-        right_min -= robot_radius
-
-        # Prevent negatives
-        front_min = max(front_min, 0.0)
-        left_min  = max(left_min, 0.0)
-        right_min = max(right_min, 0.0)
-    
         # Publish sector distances
         msg_out = Float32MultiArray()
-        msg_out.data = [left_min, front_min, right_min]
+        msg_out.data = [left_min, front_min, right_min, front_left_min, front_right_min]
         self.publisher.publish(msg_out)
 
 def main(args=None):

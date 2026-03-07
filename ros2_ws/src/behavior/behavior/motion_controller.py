@@ -20,6 +20,8 @@ class MotionController(Node):
         self.left = float('inf')
         self.front = float('inf')
         self.right = float('inf')
+        self.front_left = float('inf')
+        self.front_right = float('inf')
 
         # Subscribe to processed obstacle information
         self.subscription = self.create_subscription(
@@ -34,7 +36,11 @@ class MotionController(Node):
 
     def obstacle_callback(self, msg):
         # Update sector distances
-        self.left, self.front, self.right = msg.data
+        (self.left,
+         self.front,
+         self.right,
+         self.front_left,
+         self.front_right) = msg.data
 
     def timer_callback(self):
         msg = TwistStamped()
@@ -42,12 +48,21 @@ class MotionController(Node):
         danger = 0.25
         forward_speed = 0.25
         turn_speed = 0.8
+        corner_danger = 0.3
 
         # Default: move forward
         linear = forward_speed
         angular = 0.0
 
-        if self.front < danger:
+        if self.front_left < corner_danger:
+            linear = 0.05
+            angular = -turn_speed   # turn right hard
+
+        elif self.front_right < corner_danger:
+            linear = 0.05
+            angular = turn_speed    # turn left hard
+
+        elif self.front < danger:
             # Turn toward clearer side
             linear = 0.0
             if self.left > self.right:

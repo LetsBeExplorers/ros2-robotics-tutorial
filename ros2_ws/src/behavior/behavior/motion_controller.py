@@ -43,6 +43,13 @@ class MotionController(Node):
          self.front_right) = msg.data
 
     def timer_callback(self):
+
+        self.get_logger().info(
+            f"L:{self.left:.2f} FL:{self.front_left:.2f} "
+            f"F:{self.front:.2f} FR:{self.front_right:.2f} "
+            f"R:{self.right:.2f}"
+        )
+
         msg = TwistStamped()
 
         # Danger distance thresholds
@@ -59,16 +66,19 @@ class MotionController(Node):
 
         # Front left obstacle
         if self.front_left < corner_danger:
+            self.get_logger().info("TURNING RIGHT — Front Left Danger")
             linear = 0.05
             angular = -turn_speed   # turn right hard
 
         # Front right obstacle
         elif self.front_right < corner_danger:
+            self.get_logger().info("TURNING RIGHT — Front Left Danger")
             linear = 0.05
             angular = turn_speed    # turn left hard
 
         # Front obstacle
         elif self.front < danger:
+            self.get_logger().info("FRONT DANGER")
             # Turn toward clearer side
             linear = 0.0
             if self.left > self.right:
@@ -78,13 +88,17 @@ class MotionController(Node):
 
         # Left side obstacle
         elif self.left < side_danger:
+            self.get_logger().info("LEFT SIDE DANGER")
             linear = 0.0 
             angular = -turn_speed * 0.5
 
         # Right side obstacle
         elif self.right < side_danger:
+            self.get_logger().info("LEFT SIDE DANGER")
             linear = 0.0
             angular = turn_speed * 0.5
+        else:
+            self.get_logger().info("CLEAR — MOVING FORWARD")
 
         # Speeds actually set here after decision
         msg.twist.linear.x = linear

@@ -39,19 +39,32 @@ class MotionController(Node):
     def timer_callback(self):
         msg = TwistStamped()
 
-        danger = 0.2
+        danger = 0.25
+        forward_speed = 0.25
+        turn_speed = 0.8
 
-        msg.twist.linear.x = 0.2
-        msg.twist.angular.z = 0.0
+        # Default: move forward
+        linear = forward_speed
+        angular = 0.0
 
         if self.front < danger:
-            msg.twist.linear.x = 0.0
+            # Turn toward clearer side
+            linear = 0.0
+            if self.left > self.right:
+                angular = turn_speed
+            else:
+                angular = -turn_speed
 
         elif self.left < danger:
-            msg.twist.linear.x = 0.0
+            linear = 0.1
+            angular = -turn_speed * 0.5
 
         elif self.right < danger:
-            msg.twist.linear.x = 0.0
+            linear = 0.1
+            angular = turn_speed * 0.5
+
+        msg.twist.linear.x = linear
+        msg.twist.angular.z = angular
 
         msg.header.stamp = self.get_clock().now().to_msg()
         msg.header.frame_id = "base_link"

@@ -84,24 +84,28 @@
 - Separation of responsibilities
 - Real-time data flow between nodes
 
-## Decision Logic & Tuning (40–50 min)
+## Parameters and System Behavior (40–50 min)
 
 ### Goals
-- Explain how the robot makes decisions
-- Show how behavior is adjustable
-
-### Decision Logic
-- Purely reactive (no map, no planning)
-- Rules:
-  - Front obstacle → stop
-  - Side obstacle → turn
-- Turn commitment prevents oscillation
+- Explain how the robot’s behavior is controlled and adjusted
+- Connect system design → actual motion decisions
 
 ### Parameters
-- Distance thresholds (danger zones)
-- Forward speed
-- Turn speed
+- Distance thresholds define safety zones
+- Motion parameters
 - LiDAR sector definitions
+
+### System Implementation
+- Perception node
+- Behavior node
+- Interface node
+
+### What to Watch During the Demo
+- Sensor data drives all decisions
+- No map or path planning
+- Obstacles trigger immediate responses
+- Robot turns toward open space
+- Turn commitment keeps motion stable
 
 ## Live Demonstration (50–55 min)
 

@@ -1,146 +1,142 @@
-# Tutorial Outline – ROS 2 Autonomous Navigation Workshop
+# ROS 2 Autonomous Navigation Tutorial – Flow Outline
 
-This tutorial demonstrates a complete ROS 2 autonomy stack implementing reactive obstacle avoidance using TurtleBot3 in Gazebo simulation.
+## Introduction (0–5 min)
 
-The workshop is structured to satisfy all required technical components through live demonstrations and code walkthroughs.
-
-## 0–5 Minutes: Overview & Learning Goals
-
-### Objectives
+### Goals
 - Introduce ROS 2 and its role in robotics
-- Explain simulation-based robot development
-- Describe tutorial goals and outcomes
+- Explain why simulation is used
+- Set expectations for the tutorial
 
-### Talking Points
-- What is ROS 2?
-- Why simulation before real robots?
-- What is Gazebo?
-- What is a differential drive robot?
-- What students will learn:
-  - ROS 2 environment setup
-  - Workspace building
-  - Node and topic communication
-  - Sensor integration
-  - Motion control
-  - Reactive obstacle avoidance
+### Key Points
+- ROS 2 as a modular robotics framework
+- Simulation (Gazebo) enables safe testing
+- Overview of what will be built:
+  - Perception → decision → control pipeline
+  - Reactive obstacle avoidance system
 
-## 5–15 Minutes: ROS 2 Setup & Launching Simulation
+## Setup & System Overview (5–15 min)
 
-### Objectives
-- Demonstrate ROS 2 environment
-- Show workspace structure
-- Build project using colcon
-- Launch simulator and robot
+### Goals
+- Show development environment
+- Explain project structure
+- Launch the system
 
-### Live Demonstration
-- Show OS and ROS 2 distribution
-- Show workspace directory structure
-- Explain build system
-- Run simulation launch script
-- Run autonomy stack script
-- Verify robot appears in Gazebo
+### Demo Flow
+- Show OS, ROS 2 version, and simulator
+- Walk through workspace structure (`ros2_ws/src`)
+- Explain build process (`colcon build`)
+- Run simulation and autonomy stack
+- Verify robot appears and is running
 
-### Key Concepts
-- ROS 2 workspace
-- ROS 2 packages
-- colcon build system
+### Concepts
+- ROS 2 workspace and packages
+- Build + source workflow
 - Launch automation
-- Simulation environments
 
-## 15–25 Minutes: ROS 2 Core Concepts
+## ROS 2 Core Concepts (15–25 min)
 
-### Objectives
-- Demonstrate ROS 2 CLI tools
-- Show node communication
-- Visualize system architecture
+### Goals
+- Explain how ROS systems communicate
+- Demonstrate tools for inspecting the system
 
-### Live Demonstration
+### Demo
 - List active topics
-- Echo live sensor data
+- Echo sensor data
 - Inspect velocity commands
-- Display ROS graph visualization
+- Visualize node graph
 
-### Concepts Explained
-- Nodes
-- Topics
-- Publishers vs Subscribers
-- Message types
-- Modular robotics architecture
+### Concepts
+- Nodes = independent processes
+- Topics = communication channels
+- Publishers vs subscribers
+- Key system topics:
+  - `/scan` (sensor data)
+  - `/cmd_vel` (motion commands)
+  - `/odom`, `/tf` (state + transforms)
 
-## 25–40 Minutes: Code Walkthrough
+## System Architecture & Code (25–40 min)
 
-### Objectives
-- Explain structure of custom ROS 2 nodes
-- Demonstrate perception → decision → actuation pipeline
-- Show meaningful custom node development
+### Goals
+- Explain how the system is structured
+- Walk through each major component
 
-### Perception Node
-- LaserScan subscriber
-- Angular sector processing
-- Obstacle distance extraction
-- Publishing processed environment data
+### Architecture Flow
+- Sensor → Perception → Behavior → Robot
 
-### Behavior Node
+### Components
+
+#### Perception
+- Processes LiDAR data
+- Divides environment into sectors
+- Extracts obstacle distances
+
+#### Behavior
 - Reactive control loop
-- Obstacle avoidance decision logic
-- Direction selection
-- Motion command generation
-- Parameterized behavior tuning
+- Chooses direction based on obstacles
+- Generates velocity commands
 
-### Platform Interface Node
-- Command forwarding
-- Hardware abstraction
-- Separation of autonomy and platform control
+#### Platform Interface
+- Converts commands into robot motion
+- Abstracts hardware/simulator differences
 
 ### Key Concepts
-- Reactive vs deliberative robotics
-- Control loop timing
-- Safety thresholds
 - Modular system design
-- Parameterized configuration
+- Separation of responsibilities
+- Real-time data flow between nodes
 
-## 40–55 Minutes: Autonomous Behavior Demonstration
+## Decision Logic & Tuning (40–50 min)
 
-### Objectives
-- Demonstrate reactive obstacle avoidance
-- Show robot motion control in simulation
-- Use live sensor data for decision-making
+### Goals
+- Explain how the robot makes decisions
+- Show how behavior is adjustable
 
-### Live Demonstration
-- Robot moves autonomously
-- Robot avoids walls
-- Robot navigates around obstacles
-- Robot adapts continuously to environment
+### Decision Logic
+- Purely reactive (no map, no planning)
+- Rules:
+  - Front obstacle → stop
+  - Side obstacle → turn
+- Turn commitment prevents oscillation
 
-### Real-Time Explanations
-- How LiDAR data is interpreted
-- How control commands are generated
-- Why robot turns and slows
-- Interaction of linear and angular velocity
-- Reactive behavior without path planning
+### Parameters
+- Distance thresholds (danger zones)
+- Forward speed
+- Turn speed
+- LiDAR sector definitions
 
-## 55–60 Minutes: Troubleshooting & Recap
+## Live Demonstration (50–55 min)
+
+### Goals
+- Show the system working in real time
+
+### While Running
+- Explain robot behavior live:
+  - Why it turns
+  - Why it slows/stops
+- Connect sensor input → motion output
+- Highlight continuous feedback loop
+
+## Troubleshooting & Lessons (55–58 min)
 
 ### Common Issues
-- Environment not sourced
-- Workspace build errors
-- Missing topics
-- Simulator launch failures
-- DDS middleware conflicts
-- Incorrect parameter tuning
+- Robot not moving → `/cmd_vel` not publishing
+- Spinning → thresholds too sensitive
+- Ignoring obstacles → `/scan` issue
+- Erratic motion → tuning or sensor noise
 
-### Recap
-- ROS 2 setup and environment
-- Core ROS communication concepts
-- Sensor data integration
-- Motion control interfaces
-- Reactive obstacle avoidance
-- Modular autonomy architecture
+### Lessons
+- Modular design simplifies debugging
+- Parameter tuning is critical
+- ROS tools help diagnose issues quickly
 
-### Closing
-- Encourage experimentation
-- Suggest project extensions:
-  - Wall following
-  - Navigation stack (Nav2)
-  - Mapping and SLAM
-  - Multi-robot systems
+## Recap & Closing (58–60 min)
+
+### Summary
+- Built a complete ROS 2 autonomy pipeline
+- Connected perception, decision-making, and control
+- Demonstrated real-time reactive navigation
+- Showed modular node-based system design
+
+### Resources
+- Project repository (GitHub)
+- ROS 2 documentation
+- Gazebo simulator documentation

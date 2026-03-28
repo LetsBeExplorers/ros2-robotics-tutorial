@@ -38,6 +38,9 @@ colcon build --symlink-install
 source install/setup.bash
 cd ..
 
+# Make scripts executable (first time only)
+chmod +x start_sim.sh run.sh
+
 # Start simulator
 ./start_sim.sh
 

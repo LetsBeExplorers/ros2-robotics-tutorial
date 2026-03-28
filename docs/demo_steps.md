@@ -1,118 +1,132 @@
-# Live Demo Steps — ROS 2 Reactive Obstacle Avoidance
+# Live Demo Flow – ROS 2 Reactive Obstacle Avoidance
 
-This guide lists the exact commands and actions used during the recorded tutorial.
+## Environment Setup (Intro Section)
 
-## 1. Show ROS 2 Environment
+### Show System Environment
+- Display OS and ROS version
+- Confirm ROS is sourced
 
-Display OS and ROS version:
-
-```bash
+Commands:
 lsb_release -a
 ros2 --version
-```
 
-## 2. Show Workspace Structure
+## Workspace & Project Structure
 
-```bash
+### Show Workspace
+- Navigate to workspace
+- Explain directory structure
+
+Commands:
 cd ros2_ws
 tree -L 2
-```
 
-Explain packages and folder organization.
+### Explain:
+- `src/` → source code and packages
+- `build/` → compilation files
+- `install/` → executables
+- `log/` → build logs
 
-## 3. Build Workspace
+## Build Process
 
-```bash
+### Build and Source Workspace
+- Explain why build is required
+- Explain `--symlink-install`
+
+Commands:
 colcon build --symlink-install
 source install/setup.bash
-```
 
-## 4. Launch Simulation
+## Launch System
 
-```bash
+### Start Simulation
+Commands:
 ./start_sim.sh
-```
 
-Wait for Gazebo to fully load.
+- Wait for Gazebo to load
 
-## 5. Launch Autonomy Stack
-
-Open new terminal:
-
-```bash
+### Start Autonomy Stack
+Commands:
 ./run.sh
-```
 
-Robot should begin autonomous movement.
+- Robot should begin moving
 
-## 6. ROS 2 Core Tools
+## ROS 2 Core Concepts (While System Running)
 
-### List Topics
-
-```bash
+### Show Active Topics
+Commands:
 ros2 topic list
-```
 
-### Inspect LiDAR Sensor
+- Explain topics as communication channels
 
-```bash
+### Inspect LiDAR Data
+Commands:
 ros2 topic echo /scan
-```
 
-### Inspect Processed Obstacle Data
-
-```bash
-ros2 topic echo /obstacle_info
-```
+- Explain LaserScan data and ranges
 
 ### Inspect Velocity Commands
-
-```bash
+Commands:
 ros2 topic echo /cmd_vel
-```
 
-### View Topic Information
+- Explain linear vs angular velocity
 
-```bash
+### Inspect Topic Connections
+Commands:
 ros2 topic info /cmd_vel
-```
 
-### Visualize ROS Graph
-
-```bash
+### Visualize System
+Commands:
 rqt_graph
-```
 
-## 7. Demonstrate Robot Motion Control
+- Show node → topic relationships
 
-Observe robot moving autonomously in Gazebo.
+## System Behavior Demonstration
 
-Explain `/cmd_vel` interface:
-- Linear velocity controls forward motion
-- Angular velocity controls turning
+### Observe Robot Motion
+- Robot moves autonomously
+- Explain:
+  - Forward motion when clear
+  - Turning near obstacles
 
-## 8. Demonstrate Sensor-Driven Behavior
+### Demonstrate Sensor-Driven Behavior
+- Move robot near:
+  - Walls
+  - Corners
+  - Tight spaces
 
-Move robot near obstacles:
-- Walls
-- Corners
-- Tight passages
+Explain:
+- Sensor input → decision → motion
+- Real-time reactive loop
 
-Observe real-time obstacle avoidance.
+## Code Walkthrough (Conceptual)
 
-## 9. Code Walkthrough (No Commands)
+### Perception Node
+- Subscribes to `/scan`
+- Converts LiDAR into sector distances
 
-Open source files and explain:
-- Perception node
-- Behavior node
-- Platform interface node
+### Behavior Node
+- Subscribes to processed data
+- Applies obstacle avoidance rules
+- Publishes motion commands
 
-## 10. Safe Shutdown
+### Platform Interface Node
+- Converts commands into robot motion
+- Sends to `/cmd_vel`
 
-Press:
+## Motion Control Explanation (During Demo)
 
-```
+Commands:
+ros2 topic echo /cmd_vel
+
+Explain:
+- Linear velocity → forward motion
+- Angular velocity → turning
+- Values change in real time based on obstacles
+
+## Shutdown
+
+### Stop System
+- Safely terminate nodes
+
+Command:
 Ctrl + C
-```
-
-Scripts safely stop robot and terminate nodes.
